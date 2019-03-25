@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <ImageView
         android:id="@+id/bing_pic_img"
         android:layout_width="match_parent"
@@ -22,54 +21,7 @@
             android:layout_height="match_parent"
             android:paddingTop="20dp">
 
-            <RelativeLayout
-                android:id="@+id/rl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/open"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:background="@drawable/open_black"
-                    />
-
-                <TextView
-                    android:id="@+id/title_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="5dp"
-                    android:textSize="20dp"
-                    android:text="测试文字"
-                    android:textColor="#fff"/>
-
-                <LinearLayout
-                    android:id="@+id/ll_dot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/title_name"
-                    android:layout_centerInParent="true"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
-
-                <Button
-                    android:id="@+id/btn_manager"
-                    android:layout_width="33dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/add_black" />
-
-            </RelativeLayout>
-
+            <include layout="@layout/title_tabs"/>
 
             <!-- 需要修改-->
             <android.support.v4.view.ViewPager
@@ -78,7 +30,6 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/rl"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
 
         </RelativeLayout>
 
@@ -89,8 +40,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="start" />
 
-
     </android.support.v4.widget.DrawerLayout>
-
 
 </RelativeLayout>

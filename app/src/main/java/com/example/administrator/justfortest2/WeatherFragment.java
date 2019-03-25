@@ -168,7 +168,7 @@ public class WeatherFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         /*selectedWeather = getArguments().getString("key");
         selectedCaiWeather = getArguments().getString("key2");*/

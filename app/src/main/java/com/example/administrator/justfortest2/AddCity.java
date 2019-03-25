@@ -122,7 +122,6 @@ public class AddCity extends AppCompatActivity implements DiyCityAdapter.RecyIte
                     String cityName = data.getStringExtra("cityName");
                     if (cityName != null) {
                         diyCityList.add(new DiyCity(cityName));
-                        //recyclerView.scrollToPosition(adapter.getItemCount()-1);
                         adapter.notifyDataSetChanged();
                     }
                 }

@@ -131,16 +131,11 @@ public class Tabs extends AppCompatActivity {
 
         final int currentItem = mViewPager.getCurrentItem();
 
-        /*final String weatherUrl = "https://free-api.heweather.com/v5/weather?city=" +
-                weatherId + "&key=8c5ef408aec747eb956be39c65689b5f";*/
-
         RetrofitHttpUtil.getHeWeather("https://free-api.heweather.com/",
                 "cn101010400",
                 "8c5ef408aec747eb956be39c65689b5f",
                 new retrofit2.Callback<HeWeather>() {
-
                     Intent intent = new Intent("com.example.administrator.justfortest2.STOP_REFRESH");
-
                     @Override
                     public void onResponse(retrofit2.Call<HeWeather> call, retrofit2.Response<HeWeather> response) {
                         Log.d(TAG, "onResponse1: 和风请求成功");
@@ -412,15 +407,12 @@ public class Tabs extends AppCompatActivity {
          */
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
             return fragmentList.get(position);
         }
 
         //设置显示的总页数
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return fragmentList.size();
         }
 
