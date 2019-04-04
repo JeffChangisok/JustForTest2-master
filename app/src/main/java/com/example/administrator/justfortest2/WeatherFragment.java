@@ -87,10 +87,20 @@ public class WeatherFragment extends Fragment {
     private TextView sportTitle;
     private TextView sportInfo;
 
+    public Weather weather;
+    public HourlyAndDaily hourlyAndDaily;
+
     public WeatherFragment() {
     }
 
 
+    /*
+        ViewPager里面是一个个fragment，每次创建一个个fragment的时候，通过fragment的newInstance方法
+        将天气信息保存进去，在需要显示的时候，直接提取信息即可。需要更新天气时，提取当前子项的城市CN代码
+        通过CN代码再去请求天气信息，将结果保存在一个新的fragment中，然后覆盖原来位置上的fragment。
+        WeatherFragment fragment = WeatherFragment.newInstance(new Gson().toJson(weather), new Gson().toJson(hourlyAndDaily));
+         mFragments.set(currentItem, fragment);
+         */
     public static WeatherFragment newInstance(String arg1, String arg2) {
         WeatherFragment fragment = new WeatherFragment();
         Bundle bundle = new Bundle();
@@ -170,8 +180,6 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        /*selectedWeather = getArguments().getString("key");
-        selectedCaiWeather = getArguments().getString("key2");*/
         selectedWeather = getArguments().getString("key1");
         selectedCaiWeather = getArguments().getString("key2");
         if (selectedWeather == null) {

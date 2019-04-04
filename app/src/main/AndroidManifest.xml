@@ -29,6 +29,13 @@
             android:launchMode="singleTask"/>
 
         <activity android:name=".SearchCity"/>
+        <service
+            android:name=".Service.DemoPushService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true"
+            android:label="PushService"
+            android:process=":pushservice">
+        </service>
     </application>
 
 </manifest>
