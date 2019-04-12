@@ -8,14 +8,13 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.example.administrator.justfortest2.db.FavouriteCity;
 import com.example.administrator.justfortest2.util.DiyCityAdapter;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +68,7 @@ public class AddCity extends AppCompatActivity implements DiyCityAdapter.RecyIte
     @Override
     protected void onResume() {
         super.onResume();
-        List<FavouriteCity> list = DataSupport.findAll(FavouriteCity.class);
+        List<FavouriteCity> list = LitePal.findAll(FavouriteCity.class);
         if (list.size() - 1 > diyCityList.size()) {
             for (int i = 1; i < list.size(); i++) {
                 diyCityList.add(new DiyCity(list.get(i).getName()));

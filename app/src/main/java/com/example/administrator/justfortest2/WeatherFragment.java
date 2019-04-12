@@ -30,20 +30,14 @@ import com.example.administrator.justfortest2.gson.Result;
 import com.example.administrator.justfortest2.gson.Weather;
 import com.example.administrator.justfortest2.util.DateUtils;
 import com.example.administrator.justfortest2.util.HourlyAdapter;
-import com.example.administrator.justfortest2.util.httpUtil.HttpUtil;
 import com.example.administrator.justfortest2.util.httpUtil.RetrofitHttpUtil;
-import com.example.administrator.justfortest2.util.httpUtil.Utility;
 import com.google.gson.Gson;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.LitePal;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 /**
  * Created by Administrator on 2017/5/2.
@@ -184,7 +178,7 @@ public class WeatherFragment extends Fragment {
         selectedCaiWeather = getArguments().getString("key2");
         if (selectedWeather == null) {
             //数据库里面是否有城市
-            List<FavouriteCity> cities = DataSupport.findAll(FavouriteCity.class);
+            List<FavouriteCity> cities = LitePal.findAll(FavouriteCity.class);
             if (!cities.isEmpty()) {
                 //有缓存时直接解析天气数据
                 Weather weather = new Gson().fromJson(cities.get(0).getWeather(),Weather.class);

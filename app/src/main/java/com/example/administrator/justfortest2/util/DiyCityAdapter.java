@@ -1,7 +1,6 @@
 package com.example.administrator.justfortest2.util;
 
 import android.content.Context;
-import android.provider.Telephony;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,14 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.administrator.justfortest2.AddCity;
 import com.example.administrator.justfortest2.DiyCity;
 import com.example.administrator.justfortest2.R;
 import com.example.administrator.justfortest2.db.FavouriteCity;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.LitePal;
 
 import java.util.List;
 
@@ -75,7 +73,7 @@ public class DiyCityAdapter extends RecyclerView.Adapter<DiyCityAdapter.ViewHold
                 @Override
                 public void onClick(View v) {
                     Log.d("MyFault", "getAdapterPosition: " + getAdapterPosition());
-                    DataSupport.deleteAll(FavouriteCity.class,"name = ?",mDiyCityList.get(getAdapterPosition()).getCityName());
+                    LitePal.deleteAll(FavouriteCity.class,"name = ?",mDiyCityList.get(getAdapterPosition()).getCityName());
                     addcity.diyCityList.remove(getAdapterPosition());
                     for (int i = 0; i < addcity.diyCityList.size(); i++) {
                         Log.d("MyFault", addcity.diyCityList.get(i).getCityName());

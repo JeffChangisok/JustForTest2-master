@@ -16,18 +16,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import com.example.administrator.justfortest2.db.FavouriteCity;
 import com.example.administrator.justfortest2.gson.HeWeather;
 import com.example.administrator.justfortest2.gson.HourlyAndDaily;
 import com.example.administrator.justfortest2.gson.Weather;
-import com.example.administrator.justfortest2.util.httpUtil.HttpUtil;
 import com.example.administrator.justfortest2.util.httpUtil.RetrofitHttpUtil;
-import com.example.administrator.justfortest2.util.httpUtil.Utility;
 import com.google.gson.Gson;
 
-import org.litepal.crud.DataSupport;
+
+import org.litepal.LitePal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -107,7 +105,7 @@ public class SearchCity extends AppCompatActivity {
                 final String weatherId = mData.get(position).get("id").toString();
                 final String cityName = mData.get(position).get("title").toString();
 
-                List<FavouriteCity> list = DataSupport.where("name = ?", cityName)
+                List<FavouriteCity> list = LitePal.where("name = ?", cityName)
                         .find(FavouriteCity.class);
 
                 if (list.isEmpty()) {

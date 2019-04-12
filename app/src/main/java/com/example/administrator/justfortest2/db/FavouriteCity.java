@@ -1,15 +1,12 @@
 package com.example.administrator.justfortest2.db;
 
-import com.example.administrator.justfortest2.gson.HourlyAndDaily;
-import com.example.administrator.justfortest2.gson.Weather;
-
-import org.litepal.crud.DataSupport;
+import org.litepal.crud.LitePalSupport;
 
 /**
  * Created by Administrator on 2017/5/8.
  */
 
-public class FavouriteCity extends DataSupport{
+public class FavouriteCity extends LitePalSupport {
     private int id;
     private String name;
     private String weather;

@@ -20,7 +20,7 @@ import com.example.administrator.justfortest2.db.Province;
 import com.example.administrator.justfortest2.util.httpUtil.HttpUtil;
 import com.example.administrator.justfortest2.util.httpUtil.Utility;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.LitePal;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -130,7 +130,7 @@ public class ChooseAreaFragment extends Fragment {
     private void queryProvinces() {
         titleText.setText("中国");
         backButton.setVisibility(View.GONE);
-        provinceList = DataSupport.findAll(Province.class);
+        provinceList = LitePal.findAll(Province.class);
         if (provinceList.size() > 0) {
             dataList.clear();
             for (Province province : provinceList) {
@@ -151,7 +151,7 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCities() {
         titleText.setText(selectedProvince.getProvinceName());
         backButton.setVisibility(View.VISIBLE);
-        cityList = DataSupport.where("provinceid = ?", String.valueOf(selectedProvince.getId()))
+        cityList = LitePal.where("provinceid = ?", String.valueOf(selectedProvince.getId()))
                 .find(City.class);
         if (cityList.size() > 0) {
             dataList.clear();
@@ -174,7 +174,7 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCounties() {
         titleText.setText(selectedCity.getCityName());
         backButton.setVisibility(View.VISIBLE);
-        countyList = DataSupport.where("cityid = ?", String.valueOf(selectedCity.getId()))
+        countyList = LitePal.where("cityid = ?", String.valueOf(selectedCity.getId()))
                 .find(County.class);
         if (countyList.size() > 0) {
             dataList.clear();

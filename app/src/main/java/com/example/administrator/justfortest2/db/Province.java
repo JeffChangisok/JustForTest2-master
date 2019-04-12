@@ -1,12 +1,12 @@
 package com.example.administrator.justfortest2.db;
 
-import org.litepal.crud.DataSupport;
+import org.litepal.crud.LitePalSupport;
 
 /**
  * Created by Administrator on 2017/4/23.
  */
 
-public class Province extends DataSupport {
+public class Province extends LitePalSupport {
     private int id;
     private String provinceName;
     private int provinceICode;

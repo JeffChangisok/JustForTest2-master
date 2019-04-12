@@ -30,10 +30,10 @@ import com.example.administrator.justfortest2.gson.Weather;
 import com.example.administrator.justfortest2.util.httpUtil.HttpUtil;
 import com.example.administrator.justfortest2.util.StatusBarUtil;
 import com.example.administrator.justfortest2.util.httpUtil.RetrofitHttpUtil;
-import com.example.administrator.justfortest2.util.httpUtil.Utility;
 import com.google.gson.Gson;
 
-import org.litepal.crud.DataSupport;
+
+import org.litepal.LitePal;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -194,7 +194,7 @@ public class Tabs extends AppCompatActivity {
      */
     public void setWeatherOnPosition0(final String weatherId) {
 
-        savedList = DataSupport.findAll(FavouriteCity.class);
+        savedList = LitePal.findAll(FavouriteCity.class);
 
         RetrofitHttpUtil.getHeWeather("https://free-api.heweather.com/",
                 weatherId,
@@ -270,7 +270,7 @@ public class Tabs extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        savedList = DataSupport.findAll(FavouriteCity.class);
+        savedList = LitePal.findAll(FavouriteCity.class);
         if (savedList.size() != 0 && savedList.size() != mFragments.size()) {
             preSelectedBtn = new Button(this);
             mFragments.clear();
