@@ -159,6 +159,7 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //LocalBroadcastManager是单例模式，会在Tabs活动中调用sendBroadcast(intent)方法来唤起onReceive方法
         localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
         intentFilter = new IntentFilter();
         intentFilter.addAction("com.example.administrator.justfortest2.STOP_REFRESH");
