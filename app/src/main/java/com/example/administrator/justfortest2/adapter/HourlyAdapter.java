@@ -1,4 +1,4 @@
-package com.example.administrator.justfortest2.util;
+package com.example.administrator.justfortest2.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.administrator.justfortest2.HourlyInfo;
+import com.example.administrator.justfortest2.bean.HourlyInfo;
 import com.example.administrator.justfortest2.R;
 
 import java.util.List;

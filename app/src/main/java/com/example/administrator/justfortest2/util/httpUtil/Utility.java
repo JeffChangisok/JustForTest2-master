@@ -3,7 +3,6 @@ package com.example.administrator.justfortest2.util.httpUtil;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.example.administrator.justfortest2.HourlyInfo;
 import com.example.administrator.justfortest2.db.City;
 import com.example.administrator.justfortest2.db.County;
 import com.example.administrator.justfortest2.db.Province;

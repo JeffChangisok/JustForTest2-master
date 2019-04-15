@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/rl"
+    android:id="@+id/titleRelativeLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -11,7 +11,7 @@
         android:layout_height="35dp"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
-        android:background="@drawable/open_black"
+        android:background="@drawable/open_write"
         />
 
     <TextView
@@ -44,6 +44,6 @@
         android:layout_marginBottom="5dp"
         android:layout_marginRight="4dp"
         android:layout_alignParentRight="true"
-        android:background="@drawable/add_black" />
+        android:background="@drawable/apps" />
 
 </RelativeLayout>

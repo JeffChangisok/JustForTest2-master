@@ -24,7 +24,6 @@ import com.example.administrator.justfortest2.gson.Weather;
 import com.example.administrator.justfortest2.util.httpUtil.RetrofitHttpUtil;
 import com.google.gson.Gson;
 
-
 import org.litepal.LitePal;
 
 import java.io.BufferedReader;
@@ -35,13 +34,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
-
-import static org.litepal.LitePalApplication.getContext;
-
 public class SearchCity extends AppCompatActivity {
+
+    private static final String TAG = "zhangfan";
 
     EditText eSearch;
     ImageView ivDeleteText;
@@ -91,13 +86,13 @@ public class SearchCity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "进入SearchActivity");
         setContentView(R.layout.activity_search_city);
         mListView = (ListView) findViewById(R.id.mListView);
         eSearch = (EditText) findViewById(R.id.etSearch);
         set_eSearch_TextChanged();
         set_ivDeleteText_OnClick();
         set_mListView_adapter();
-
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -110,17 +105,15 @@ public class SearchCity extends AppCompatActivity {
 
                 if (list.isEmpty()) {
                     showProgressDialog();
-
+                    Log.d(TAG, "onItemClick,weatherId = " + weatherId);
                     RetrofitHttpUtil.getHeWeather("https://free-api.heweather.com/",
                             weatherId,
                             "8c5ef408aec747eb956be39c65689b5f",
                             new retrofit2.Callback<HeWeather>() {
 
-                                Intent intent = new Intent("com.example.administrator.justfortest2.STOP_REFRESH");
-
                                 @Override
                                 public void onResponse(retrofit2.Call<HeWeather> call, retrofit2.Response<HeWeather> response) {
-                                    Log.d("zf", "onResponse1: 和风请求成功");
+                                    Log.d(TAG, "onResponse1: 和风请求成功");
                                     final Weather weather = response.body().HeWeather5.get(0);
 
                                     RetrofitHttpUtil.getCaiWeather("https://api.caiyunapp.com/",
@@ -129,6 +122,7 @@ public class SearchCity extends AppCompatActivity {
                                             new retrofit2.Callback<HourlyAndDaily>() {
                                                 @Override
                                                 public void onResponse(retrofit2.Call<HourlyAndDaily> call, retrofit2.Response<HourlyAndDaily> response) {
+                                                    Log.d(TAG, "onResponse2: 彩云请求成功");
                                                     final HourlyAndDaily hourlyAndDaily = response.body();
                                                     if (weather != null && "ok".equals(weather.status) &&
                                                             hourlyAndDaily != null && "ok".equals(hourlyAndDaily.status)) {
@@ -138,23 +132,24 @@ public class SearchCity extends AppCompatActivity {
                                                         favouriteCity.setWeatherId(weatherId);
                                                         favouriteCity.setCaiweather(new Gson().toJson(hourlyAndDaily));
                                                         favouriteCity.save();
+                                                        Log.d(TAG, "onResponse2: 天气保存成功");
                                                         closeProgressDialog();
                                                         finish();
                                                     } else {
-                                                        Log.d("zf", "onResponse: false");
+                                                        Log.d(TAG, "onResponse2: 天气信息处理失败");
                                                         closeProgressDialog();
                                                     }
 
                                                 }
                                                 @Override
                                                 public void onFailure(retrofit2.Call<HourlyAndDaily> call, Throwable t) {
-                                                    Log.d("zf", "onResponse2: " + t.getMessage());
+                                                    Log.d(TAG, "onFailure2: 彩云天气请求失败" + t.getMessage());
                                                 }
                                             });
                                 }
                                 @Override
                                 public void onFailure(retrofit2.Call<HeWeather> call, Throwable t) {
-                                    Log.d("zf", "onFailure1: " + t.getMessage());
+                                    Log.d(TAG, "onFailure1: 和风天气请求失败" + t.getMessage());
                                 }
                             });
 

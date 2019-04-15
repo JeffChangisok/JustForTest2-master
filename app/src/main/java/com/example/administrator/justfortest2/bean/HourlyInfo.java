@@ -1,4 +1,4 @@
-package com.example.administrator.justfortest2;
+package com.example.administrator.justfortest2.bean;
 
 /**
  * Created by Administrator on 2017/5/16.

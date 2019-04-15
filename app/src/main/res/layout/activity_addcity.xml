@@ -59,11 +59,12 @@
                     android:id="@+id/btn_yes"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:background="@drawable/yes"
+                    android:background="@drawable/check"
                     android:visibility="gone"
                     />
 

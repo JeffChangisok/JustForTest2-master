@@ -1,4 +1,4 @@
-package com.example.administrator.justfortest2.util;
+package com.example.administrator.justfortest2.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.administrator.justfortest2.AddCity;
-import com.example.administrator.justfortest2.DiyCity;
+import com.example.administrator.justfortest2.bean.DiyCity;
 import com.example.administrator.justfortest2.R;
 import com.example.administrator.justfortest2.db.FavouriteCity;
 

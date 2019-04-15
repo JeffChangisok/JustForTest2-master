@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,30 +48,24 @@ import static org.litepal.LitePalApplication.getContext;
 
 public class Tabs extends AppCompatActivity {
 
-    final static String TAG = "zff";
+    final static String TAG = "zhangfan";
 
     public TextView textView;
-
     public ImageView bingPicImg;
-
     public DrawerLayout drawerLayout;
-
     public LinearLayout ll;
+    public RelativeLayout titleRl;
+    public RelativeLayout titleBarRl;
 
     private LocalBroadcastManager localBroadcastManager;
-
     public SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     public ViewPager mViewPager;
-
     public List<WeatherFragment> mFragments = new ArrayList<>();
 
-    public Weather weather;
-
-    public HourlyAndDaily hourlyAndDaily;
 
     public String mWeatherId;
 
@@ -128,11 +123,10 @@ public class Tabs extends AppCompatActivity {
      * 更新天气
      */
     public void refresh(final String weatherId) {
-
+        Log.d(TAG, "Tabs: refresh,weatherId=" + weatherId);
         final int currentItem = mViewPager.getCurrentItem();
 
-        RetrofitHttpUtil.getHeWeather("https://free-api.heweather.com/",
-                "cn101010400",
+        RetrofitHttpUtil.getHeWeather("https://free-api.heweather.com/", weatherId,
                 "8c5ef408aec747eb956be39c65689b5f",
                 new retrofit2.Callback<HeWeather>() {
                     Intent intent = new Intent("com.example.administrator.justfortest2.STOP_REFRESH");
@@ -147,6 +141,7 @@ public class Tabs extends AppCompatActivity {
                                 new retrofit2.Callback<HourlyAndDaily>() {
                                     @Override
                                     public void onResponse(retrofit2.Call<HourlyAndDaily> call, retrofit2.Response<HourlyAndDaily> response) {
+                                        Log.d(TAG, "onResponse2: 彩云请求成功");
                                         final HourlyAndDaily hourlyAndDaily = response.body();
                                         if (weather != null && "ok".equals(weather.status) &&
                                                 hourlyAndDaily != null && "ok".equals(hourlyAndDaily.status)) {
@@ -154,6 +149,7 @@ public class Tabs extends AppCompatActivity {
                                             favouriteCity.setWeather(new Gson().toJson(weather));
                                             favouriteCity.setCaiweather(new Gson().toJson(hourlyAndDaily));
                                             favouriteCity.updateAll("weatherId = ?", weatherId);
+                                            Log.d(TAG, "onResponse2: 更新天气成功");
                                             WeatherFragment fragment = WeatherFragment.newInstance(new Gson().toJson(weather), new Gson().toJson(hourlyAndDaily));
                                             mFragments.set(currentItem, fragment);
                                             runOnUiThread(new Runnable() {
@@ -164,7 +160,7 @@ public class Tabs extends AppCompatActivity {
                                                 }
                                             });
                                         } else {
-                                            Log.d("MyFault", "onResponse: false");
+                                            Log.d(TAG, "onResponse2: 彩云请求失败");
                                             Toast.makeText(getContext(), "更新失败", Toast.LENGTH_SHORT).show();
 
                                         }
@@ -181,7 +177,7 @@ public class Tabs extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure(retrofit2.Call<HeWeather> call, Throwable t) {
-                        Log.d(TAG, "onFailure1: " + t.getMessage());
+                        Log.d(TAG, "onFailure1: 和风请求失败" + t.getMessage());
                         Toast.makeText(getContext(), "更新失败", Toast.LENGTH_SHORT).show();
                         localBroadcastManager.sendBroadcast(intent);
                     }
@@ -193,7 +189,7 @@ public class Tabs extends AppCompatActivity {
      *根据侧滑菜单传来的数据请求天气
      */
     public void setWeatherOnPosition0(final String weatherId) {
-
+        Log.d(TAG, "Tabs: setWeatherOnPosition0,weatherId=" + weatherId);
         savedList = LitePal.findAll(FavouriteCity.class);
 
         RetrofitHttpUtil.getHeWeather("https://free-api.heweather.com/",
@@ -211,7 +207,7 @@ public class Tabs extends AppCompatActivity {
                                 new retrofit2.Callback<HourlyAndDaily>() {
                                     @Override
                                     public void onResponse(retrofit2.Call<HourlyAndDaily> call, retrofit2.Response<HourlyAndDaily> response)  {
-
+                                        Log.d(TAG, "onResponse2: 彩云请求成功");
                                         final HourlyAndDaily hourlyAndDaily = response.body();
                                         if (weather != null && "ok".equals(weather.status) &&
                                                 hourlyAndDaily != null && "ok".equals(hourlyAndDaily.status)) {
@@ -221,6 +217,7 @@ public class Tabs extends AppCompatActivity {
                                             favouriteCity.setCaiweather(new Gson().toJson(hourlyAndDaily));
                                             favouriteCity.setName(weather.basic.cityName);
                                             favouriteCity.updateAll("id = ?", "1");
+                                            Log.d(TAG, "onResponse2: 更新第1位天气成功");
                                             mWeatherId = weather.basic.weatherId;
                                             final WeatherFragment fragment = WeatherFragment.newInstance(new Gson().toJson(weather), new Gson().toJson(hourlyAndDaily));
                                             mFragments.set(0, fragment);
@@ -240,20 +237,18 @@ public class Tabs extends AppCompatActivity {
                                                 }
                                             });
                                         } else {
-                                            Log.d("MyFault", "setWeatherOnPosition0解析彩云失败");
-                                            Log.d("MyFault", hourlyAndDaily.status);
-                                            Log.d("MyFault", weather.status);
+                                            Log.d(TAG, "setWeatherOnPosition0解析彩云失败");
                                         }
                                     }
                                     @Override
                                     public void onFailure(retrofit2.Call<HourlyAndDaily> call, Throwable t) {
-                                        Log.d(TAG, "onResponse2: " + t.getMessage());
+                                        Log.d(TAG, "onFailure2: 彩云天气请求失败" + t.getMessage());
                                     }
                                 });
                     }
                     @Override
                     public void onFailure(retrofit2.Call<HeWeather> call, Throwable t) {
-                        Log.d(TAG, "onFailure1: " + t.getMessage());
+                        Log.d(TAG, "onFailure1: 和风请求失败" + t.getMessage());
                     }
                 });
 
@@ -263,13 +258,24 @@ public class Tabs extends AppCompatActivity {
      * 构造页面
      */
     public void initView() {
+        Log.d(TAG, "Tabs: initView");
+        titleBarRl = findViewById(R.id.titleBarRl);
+        titleRl = findViewById(R.id.titleRelativeLayout);
+        ll = (LinearLayout) findViewById(R.id.ll_dot);
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        textView = (TextView) findViewById(R.id.title_name);
+        bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mViewPager = (ViewPager) findViewById(R.id.container);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), mFragments);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        statusBarImmersion();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "Tabs:onResume");
         savedList = LitePal.findAll(FavouriteCity.class);
         if (savedList.size() != 0 && savedList.size() != mFragments.size()) {
             preSelectedBtn = new Button(this);
@@ -281,6 +287,8 @@ public class Tabs extends AppCompatActivity {
                 WeatherFragment fragment = WeatherFragment.newInstance(weatherInfo, caiWeatherInfo);
                 mFragments.add(fragment);
                 initBtn(new Button(this));
+                Log.d(TAG, "onResume:name=" + savedList.get(i).getName());
+                Log.d(TAG, "onResume:cityId=" + savedList.get(i).getWeatherId());
             }
             initView();
             Button firstBtn = (Button) ll.getChildAt(0);
@@ -328,15 +336,11 @@ public class Tabs extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "进入TabsActivity");
         setContentView(R.layout.activity_tabs);
-        statusBarImmersion();
-        ll = (LinearLayout) findViewById(R.id.ll_dot);
-        localBroadcastManager = LocalBroadcastManager.getInstance(this);
-        textView = (TextView) findViewById(R.id.title_name);
-        bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        WeatherFragment fragment = WeatherFragment.newInstance(null, null);
+        initView();
+
+        WeatherFragment fragment = WeatherFragment.newInstance("", "");
         mFragments.add(fragment);
 
         String firstName = getIntent().getStringExtra("firstName");
@@ -363,8 +367,6 @@ public class Tabs extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        initView();
 
         //页面切换监听
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -443,17 +445,11 @@ public class Tabs extends AppCompatActivity {
      * 设置状态栏沉浸
      */
     public void statusBarImmersion(){
-        //当FitsSystemWindows设置 true 时，会在屏幕最上方预留出状态栏高度的 padding
-        //StatusBarUtil.setRootViewFitsSystemWindows(this,true);
-        //设置状态栏透明
         StatusBarUtil.setTranslucentStatus(this);
-        //一般的手机的状态栏文字和图标都是白色的, 可如果你的应用也是纯白色的, 或导致状态栏文字看不清
-        //所以如果你是这种情况,请使用以下代码, 设置状态使用深色文字图标风格, 否则你可以选择性注释掉这个if内容
-        if (!StatusBarUtil.setStatusBarDarkTheme(this, true)) {
-            //如果不支持设置深色风格 为了兼容总不能让状态栏白白的看不清, 于是设置一个状态栏颜色为半透明,
-            //这样半透明+白=灰, 状态栏的文字能看得清
-            StatusBarUtil.setStatusBarColor(this,0x55000000);
-        }
+        DrawerLayout.LayoutParams layoutParams = (DrawerLayout.LayoutParams) titleBarRl.getLayoutParams();
+        layoutParams.topMargin = StatusBarUtil.getStatusBarHeight(this);
+        titleBarRl.setLayoutParams(layoutParams);
+        Log.d(TAG, "statusBarImmersion: "+StatusBarUtil.getStatusBarHeight(this));
     }
 
 

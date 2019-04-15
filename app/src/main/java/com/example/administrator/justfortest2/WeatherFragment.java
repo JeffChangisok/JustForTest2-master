@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.administrator.justfortest2.bean.HourlyInfo;
 import com.example.administrator.justfortest2.db.FavouriteCity;
 import com.example.administrator.justfortest2.gson.DailyTemp;
 import com.example.administrator.justfortest2.gson.HeWeather;
@@ -29,7 +30,7 @@ import com.example.administrator.justfortest2.gson.HourlyTemp;
 import com.example.administrator.justfortest2.gson.Result;
 import com.example.administrator.justfortest2.gson.Weather;
 import com.example.administrator.justfortest2.util.DateUtils;
-import com.example.administrator.justfortest2.util.HourlyAdapter;
+import com.example.administrator.justfortest2.adapter.HourlyAdapter;
 import com.example.administrator.justfortest2.util.httpUtil.RetrofitHttpUtil;
 import com.google.gson.Gson;
 
@@ -45,7 +46,7 @@ import java.util.List;
 
 public class WeatherFragment extends Fragment {
 
-    final static String TAG = "zff";
+    final static String TAG = "zhangfan";
     private List<HourlyInfo> hourlyList = new ArrayList<>();
     private ScrollView weatherLayout;
 
@@ -66,7 +67,6 @@ public class WeatherFragment extends Fragment {
 
     private LinearLayout forecastLayout;
 
-
     private TextView aqi;
     private TextView pm25;
     private TextView qlty;
@@ -84,6 +84,7 @@ public class WeatherFragment extends Fragment {
     public Weather weather;
     public HourlyAndDaily hourlyAndDaily;
 
+
     public WeatherFragment() {
     }
 
@@ -96,9 +97,14 @@ public class WeatherFragment extends Fragment {
          mFragments.set(currentItem, fragment);
          */
     public static WeatherFragment newInstance(String arg1, String arg2) {
+        if (arg1.equals("")){
+            Log.d(TAG, "WeatherFragment:newInstance参数为空");
+        } else {
+            Log.d(TAG, "WeatherFragment:newInstance参数非空");
+        }
         WeatherFragment fragment = new WeatherFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("key", arg1);
+        bundle.putString("key1", arg1);
         bundle.putString("key2", arg2);
         fragment.setArguments(bundle);
         return fragment;
@@ -116,6 +122,7 @@ public class WeatherFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "WeatherFragment:onCreateView");
         View view = inflater.inflate(R.layout.activity_weather, null);
         weatherLayout = (ScrollView) view.findViewById(R.id.weather_layout);
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
@@ -148,6 +155,10 @@ public class WeatherFragment extends Fragment {
         return view;
     }
 
+    /*
+     * 广播接收器
+     * 关闭刷新小按钮
+     */
     class LocalReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -155,10 +166,10 @@ public class WeatherFragment extends Fragment {
         }
     }
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "WeatherFragment:onCreate");
         //LocalBroadcastManager是单例模式，会在Tabs活动中调用sendBroadcast(intent)方法来唤起onReceive方法
         localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
         intentFilter = new IntentFilter();
@@ -168,32 +179,32 @@ public class WeatherFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "WeatherFragment:onActivityCreated");
         selectedWeather = getArguments().getString("key1");
         selectedCaiWeather = getArguments().getString("key2");
         if (selectedWeather == null) {
+            Log.d(TAG, "onActivityCreated:selectedWeather == null");
             //数据库里面是否有城市
             List<FavouriteCity> cities = LitePal.findAll(FavouriteCity.class);
             if (!cities.isEmpty()) {
+                Log.d(TAG, "onActivityCreated:收藏的城市非空");
                 //有缓存时直接解析天气数据
                 Weather weather = new Gson().fromJson(cities.get(0).getWeather(),Weather.class);
                 HourlyAndDaily hourlyAndDaily =new Gson().fromJson(cities.get(0).getCaiweather(),HourlyAndDaily.class);
                 mWeatherId = weather.basic.weatherId;
                 showWeatherInfo(weather, hourlyAndDaily);
             } else {
-                //无缓存时去服务器查询天气
+                Log.d(TAG, "onActivityCreated:收藏的城市为空");
+                //无缓存时去服务器查询天气8
                 mWeatherId = getActivity().getIntent().getStringExtra("weather_id");
-                weatherLayout.setVisibility(View.INVISIBLE);
+                weatherLayout.setVisibility(View.INVISIBLE);//避免当还未加载完数据时，控件显示空内容的情况
                 requestWeather(mWeatherId);
             }
 
         } else {
+            Log.d(TAG, "onActivityCreated:selectedWeather ！= null");
             Weather weather = new Gson().fromJson(selectedWeather,Weather.class);
             HourlyAndDaily hourlyAndDaily = new Gson().fromJson(selectedCaiWeather,HourlyAndDaily.class);
             mWeatherId = weather.basic.weatherId;
@@ -219,7 +230,7 @@ public class WeatherFragment extends Fragment {
     public void requestWeather(final String weatherId) {
         //在utility中的解析方法中会根据返回数据的键进行处理*/
         showProgressDialog();
-
+        Log.d(TAG, "WeatherFragment:requestWeather,weatherId = " + weatherId);
         RetrofitHttpUtil.getHeWeather("https://free-api.heweather.com/",
                 weatherId,
                 "8c5ef408aec747eb956be39c65689b5f",
@@ -228,7 +239,6 @@ public class WeatherFragment extends Fragment {
                     public void onResponse(retrofit2.Call<HeWeather> call, retrofit2.Response<HeWeather> response) {
                         Log.d(TAG, "onResponse1: 和风请求成功");
                         final Weather weather = response.body().HeWeather5.get(0);
-
                         RetrofitHttpUtil.getCaiWeather("https://api.caiyunapp.com/",
                                 response.body().HeWeather5.get(0).basic.jing,
                                 response.body().HeWeather5.get(0).basic.wei,
@@ -252,11 +262,11 @@ public class WeatherFragment extends Fragment {
                                                     favouriteCity.setName(weather.basic.cityName);
                                                     favouriteCity.save();
                                                     mWeatherId = weather.basic.weatherId;
+                                                    Log.d(TAG, "onResponse2: 保存天气成功");
                                                     showWeatherInfo(weather, hourlyAndDaily);
                                                     closeProgressDialog();
                                                 } else {
-                                                    Log.d("MyFault", "weatherFragment中，处理失败 ");
-                                                    Log.d("MyFault", hourlyAndDaily.status);
+                                                    Log.d(TAG, "onResponse2: 天气信息处理失败 ");
                                                 }
                                             }
                                         });
@@ -264,13 +274,13 @@ public class WeatherFragment extends Fragment {
                                     }
                                     @Override
                                     public void onFailure(retrofit2.Call<HourlyAndDaily> call, Throwable t) {
-                                        Log.d(TAG, "onResponse2: " + t.getMessage());
+                                        Log.d(TAG, "onResponse2: 彩云天气请求失败" + t.getMessage());
                                     }
                                 });
                     }
                     @Override
                     public void onFailure(retrofit2.Call<HeWeather> call, Throwable t) {
-                        Log.d(TAG, "onFailure1: " + t.getMessage());
+                        Log.d(TAG, "onFailure1: 和风天气请求失败" + t.getMessage());
                     }
                 });
 
@@ -280,7 +290,7 @@ public class WeatherFragment extends Fragment {
      * 处理并展示Weather实体类中的数据
      */
     public void showWeatherInfo(Weather weather, HourlyAndDaily hourlyAndDaily) {
-
+        Log.d(TAG, "WeatherFragment: showWeatherInfo");
         String[] strings = weather.basic.update.updateTime.split("-| ");
         StringBuilder ss = new StringBuilder();
         ss.append(strings[1]).append("月")
