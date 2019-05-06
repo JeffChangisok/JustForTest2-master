@@ -84,7 +84,9 @@ public class Tabs extends AppCompatActivity {
      * 构造按钮
      */
     public void initBtn(Button btn) {
-        btn.setLayoutParams(new ViewGroup.LayoutParams(15, 15));
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(15,15);
+        layoutParams.rightMargin = 2;
+        btn.setLayoutParams(layoutParams);
         btn.setBackgroundResource(R.drawable.dot);
         ll.addView(btn);
     }
